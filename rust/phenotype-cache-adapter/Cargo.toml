@@ -1,0 +1,25 @@
+[package]
+name = "phenotype-cache-adapter"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+phenotype-contracts = { path = "../phenotype-contracts" }
+dashmap = { workspace = true }
+lru = { workspace = true }
+moka = { workspace = true, features = ["future"] }
+serde = { workspace = true, features = ["derive"] }
+parking_lot = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio.workspace = true
+
+[features]
+default = []
