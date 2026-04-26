@@ -90,3 +90,7 @@ DataKit/
 - **[cloud](../cloud)** — Uses DataKit for multi-tenant data isolation and pipelines
 - **[PhenoLibs](../PhenoLibs)** — Shared data models and utilities
 - **[PhenoObservability](../PhenoObservability)** — Data quality metrics and observability integration
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
