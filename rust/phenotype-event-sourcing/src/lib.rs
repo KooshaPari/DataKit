@@ -18,6 +18,13 @@ pub mod memory;
 pub mod snapshot;
 pub mod store;
 
+mod phenotype_infrakit {
+    pub mod phenotype_observability {
+        pub fn init_tracer(_service_name: &str) {}
+        pub fn increment_counter(_name: &str) {}
+    }
+}
+
 pub use error::{EventSourcingError, HashError, Result};
 pub use event::EventEnvelope;
 pub use hash::{compute_hash, verify_chain, ZERO_HASH};
