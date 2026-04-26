@@ -1,11 +1,13 @@
 [workspace]
 resolver = "2"
 members = [
-    "phenotype-cache-adapter",
     "phenotype-event-bus",
-    "phenotype-event-sourcing",
     "phenotype-in-memory-store",
 ]
+# phenotype-cache-adapter and phenotype-event-sourcing migrated to canonical
+# phenoShared (KooshaPari/phenoShared) per kit-sdk-vendor-pattern-audit.
+# Consumers in this workspace: none — the vendored copies were dead weight.
+# Re-add as path/git dependencies only when a DataKit crate consumes them.
 
 [workspace.package]
 version = "0.1.0"
