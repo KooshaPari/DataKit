@@ -17,4 +17,7 @@ async-trait = "0.1"
 tokio = { version = "1", features = ["full"] }
 blake3 = "1.5"
 hex = "0.4"
-phenotype-observability = { path = "../../phenotype-infrakit/crates/phenotype-observability" }
+# NOTE: phenotype-observability is not yet published in phenoShared.
+# Sourcing from PhenoProc (canonical home) until it migrates to phenoShared.
+# Tracking: kit-sdk-vendor-pattern-audit (replace phenotype-infrakit local path).
+phenotype-observability = { git = "https://github.com/KooshaPari/PhenoProc.git", branch = "main" }
