@@ -1,96 +1,79 @@
 # DataKit
 
-Comprehensive data management and integration platform for modern data pipelines. Provides type-safe data modeling, schema evolution, ETL pipeline orchestration, data quality validation, and lineage tracking across multiple storage backends (SQL, NoSQL, cloud data warehouses).
+Storage and events SDK for the Phenotype ecosystem. Polyglot building blocks for databases, caches, object storage, and event streams — shipped as Go, Rust, and Python bindings from a single source of truth.
 
-## Overview
+**Part of the [Phenotype org](https://github.com/KooshaPari) ecosystem.** Shares CI reusables and conventions with [phenoShared](https://github.com/KooshaPari/phenoShared). Follows org conventions: conventional commits, `<type>/<topic>` branching, Apache-2.0 + MIT dual license.
 
-**DataKit** is the unified data layer for the Phenotype ecosystem, bridging operational systems and analytics platforms. It provides declarative data pipelines, automatic schema evolution, built-in quality controls, and consistent APIs across all data storage systems while maintaining full auditability and lineage.
+## What it does
 
-**Core Mission**: Eliminate data integration complexity through type-safe modeling, schema versioning, automated quality validation, and unified pipeline orchestration.
+Every Phenotype service eventually needs the same things: a key/value cache, a relational or document store, an object bucket, and an event bus. DataKit provides idiomatic Go, Rust, and Python wrappers around those primitives so services never have to pick (or misconfigure) a client library ad-hoc.
 
-## Technology Stack
+The Python bindings are the most mature surface today; Go and Rust bindings mirror the same contracts.
 
-- **Languages**: Python (primary), Rust (performance-critical components), Go (for stream processing)
-- **Core Components**:
-  - Data modeling with schema versioning and evolution
-  - ETL pipeline orchestration (Airflow, Temporal compatible)
-  - Data quality frameworks (Great Expectations integration)
-  - Schema registry and versioning
-  - Lineage tracking and data governance
-- **Storage Backends**: PostgreSQL, MongoDB, Snowflake, BigQuery, Redshift, Parquet
-- **Serialization**: Protocol Buffers, Parquet, JSON Schema
-- **Observability**: Structured logging, lineage metrics, pipeline monitoring
+## Status
 
-## Key Features
+**Active.** Core Python packages (`pheno-database`, `pheno-caching`, `pheno-storage`, `pheno-events`, `db-kit`) are in use by downstream services. See [CHANGELOG.md](./CHANGELOG.md).
 
-- **Type-Safe Data Modeling**: Declarative schemas with strong type guarantees across languages
-- **Schema Evolution**: Automatic detection and migration of schema changes
-- **ETL Orchestration**: Declarative pipeline definitions with DAG-based scheduling
-- **Data Quality Validation**: Built-in validators and custom rule engines
-- **Lineage Tracking**: Complete data provenance from source to destination
-- **Multi-Backend Support**: Unified API across SQL, NoSQL, and cloud DW systems
-- **Consistency Guarantees**: ACID semantics with automatic conflict resolution
-- **Data Governance**: Audit trails, access control, PII detection
+## Requirements
 
-## Quick Start
+- **Python** (primary): 3.11+ with `uv` or `pip`
+- **Go**: 1.22+
+- **Rust**: stable, edition 2021
+- Backing services at runtime depend on which adapter you use: Postgres, Redis, MinIO/S3, NATS, etc.
+
+## Quick start
+
+### Python
 
 ```bash
-# Clone and explore
-git clone <repo-url>
-cd DataKit
-
-# Review governance and architecture
-cat CLAUDE.md          # Project governance & development philosophy
-cat PRD.md             # Full product requirements
-cat AGENTS.md          # Agent operating contract
-
-# Explore structure
-ls -la python/         # Python data models
-ls -la rust/           # Rust performance components
-ls -la go/             # Go stream processing
-ls -la docs/           # Documentation and examples
-
-# Build and test (Python)
-cd python && pip install -e .
-pytest tests/
+cd python
+uv sync                    # or: pip install -e '.[dev]'
+uv run pytest              # or: pytest
+uv run ruff check .
+uv run mypy .
 ```
 
-## Project Structure
+### Go
 
-```
-DataKit/
-├── python/            # Python data modeling & orchestration
-│   ├── datakit/
-│   │   ├── models/    # Schema definitions, validators
-│   │   ├── pipeline/  # ETL pipeline orchestration
-│   │   ├── quality/   # Data quality frameworks
-│   │   └── storage/   # Backend adapters
-│   └── tests/
-├── rust/              # Performance-critical components
-│   ├── crates/
-│   │   └── datakit-core/  # Schema validation, lineage
-│   └── Cargo.toml
-├── go/                # Stream processing components
-├── docs/              # Full documentation
-└── CLAUDE.md, AGENTS.md, PRD.md
+```bash
+cd go
+go build ./...
+go test ./...
 ```
 
-## Use Cases
+### Rust
 
-| Scenario | DataKit Feature | Example |
-|----------|-----------------|---------|
-| Schema Evolution | Auto-detection & migration | App adds new field → DW auto-updates |
-| Data Quality | Validation rules & monitoring | Missing values flagged before load |
-| Lineage | Full provenance tracking | Trace data from source → analytics |
-| ETL Orchestration | Declarative pipelines | Define data flows as code |
-| Multi-Backend | Unified API | Same code for Postgres, BigQuery, Snowflake |
+```bash
+cd rust
+cargo build --workspace
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+```
 
-## Related Phenotype Projects
+## Structure
 
-- **[cloud](../cloud)** — Uses DataKit for multi-tenant data isolation and pipelines
-- **[PhenoLibs](../PhenoLibs)** — Shared data models and utilities
-- **[PhenoObservability](../PhenoObservability)** — Data quality metrics and observability integration
+```
+python/
+  pheno-database/   # SQL/NoSQL database client primitives
+  pheno-caching/    # Cache adapters (Redis, in-memory, tiered)
+  pheno-storage/    # Object storage (MinIO / S3-compatible)
+  pheno-events/     # Event bus adapters (NATS, etc.)
+  db-kit/           # Higher-level database convenience layer
+go/                 # Go bindings mirroring the Python contracts
+rust/               # Rust bindings mirroring the Python contracts
+```
+
+## Design principles
+
+- **Contracts first.** Each binding implements the same logical contract; semantic drift is a bug.
+- **Wrap, do not hand-roll.** Uses well-maintained upstream clients (psycopg, redis-py, minio, nats.py, etc.); adds Phenotype policy on top.
+- **Fail loudly.** Missing required config (connection URL, credentials) is a hard error; no silent fallback to in-memory stubs in production.
+- **Observability baked in.** Adapters emit structured events suitable for Phenotype's observability stack.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md). Ownership lives in [CODEOWNERS](./CODEOWNERS). Report security issues per [SECURITY.md](./SECURITY.md).
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+Dual-licensed under Apache-2.0 OR MIT. See [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT).
