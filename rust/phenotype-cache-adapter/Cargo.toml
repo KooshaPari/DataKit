@@ -7,7 +7,10 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-phenotype-contracts = { path = "../phenotype-contracts" }
+# NOTE: phenotype-contracts is not a member of this DataKit workspace and was
+# previously referenced via a broken `path = "../phenotype-contracts"`.
+# Sourcing from phenoShared (canonical home) for reproducible builds.
+phenotype-contracts = { git = "https://github.com/KooshaPari/phenoShared.git", branch = "main" }
 dashmap = { workspace = true }
 lru = { workspace = true }
 moka = { workspace = true, features = ["future"] }
