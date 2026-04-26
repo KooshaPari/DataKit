@@ -1,5 +1,10 @@
 # DataKit
 
+[![Build](https://img.shields.io/github/actions/workflow/status/KooshaPari/DataKit/ci.yml?branch=main&label=build)](https://github.com/KooshaPari/DataKit/actions)
+[![Release](https://img.shields.io/github/v/release/KooshaPari/DataKit?include_prereleases&sort=semver)](https://github.com/KooshaPari/DataKit/releases)
+[![License](https://img.shields.io/github/license/KooshaPari/DataKit)](LICENSE)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+
 Storage and events SDK for the Phenotype ecosystem. Polyglot building blocks for databases, caches, object storage, and event streams — shipped as Go, Rust, and Python bindings from a single source of truth.
 
 **Part of the [Phenotype org](https://github.com/KooshaPari) ecosystem.** Shares CI reusables and conventions with [phenoShared](https://github.com/KooshaPari/phenoShared). Follows org conventions: conventional commits, `<type>/<topic>` branching, Apache-2.0 + MIT dual license.
