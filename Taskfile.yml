@@ -12,6 +12,10 @@ vars:
   RUST_MANIFESTS_CMD: >-
     find rust -path '*/target' -prune
     -o -name Cargo.toml -print | sort
+  GO_WORKSPACE_CMD: >-
+    find go -maxdepth 2 \( -name go.work -o -name go.mod \) -print -quit
+  GO_SOURCES_CMD: >-
+    find go -type f -name '*.go' -print -quit
 
 tasks:
   default:
@@ -57,7 +61,7 @@ tasks:
             echo "==> rust: skipped"
           fi
 
-          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+          if [ -n "$({{.GO_WORKSPACE_CMD}})" ] && [ -n "$({{.GO_SOURCES_CMD}})" ]; then
             echo "==> go: build"
             (cd go && go build ./...)
           else
@@ -97,7 +101,7 @@ tasks:
             echo "==> rust: skipped"
           fi
 
-          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+          if [ -n "$({{.GO_WORKSPACE_CMD}})" ] && [ -n "$({{.GO_SOURCES_CMD}})" ]; then
             echo "==> go: test"
             (cd go && go test ./...)
           else
@@ -140,7 +144,7 @@ tasks:
             echo "==> rust: skipped"
           fi
 
-          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+          if [ -n "$({{.GO_WORKSPACE_CMD}})" ] && [ -n "$({{.GO_SOURCES_CMD}})" ]; then
             echo "==> go: lint"
             (cd go && go vet ./...)
           else
@@ -188,7 +192,7 @@ tasks:
             echo "==> rust: skipped"
           fi
 
-          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+          if [ -n "$({{.GO_WORKSPACE_CMD}})" ] && [ -n "$({{.GO_SOURCES_CMD}})" ]; then
             echo "==> go: clean"
             (cd go && go clean -cache -testcache)
           else
