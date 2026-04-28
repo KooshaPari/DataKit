@@ -1,3 +1,13 @@
 # Worktree directories (org policy)
 .worktrees/
 .claude/worktrees/
+
+# Generated Python artifacts
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/build/
+**/dist/
+**/*.egg-info/
+**/*.pyc
