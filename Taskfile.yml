@@ -1,0 +1,149 @@
+version: "3"
+
+vars:
+  ROOT_DIR:
+    sh: pwd
+
+tasks:
+  default:
+    desc: Run build, test, and lint
+    deps:
+      - build
+      - test
+      - lint
+
+  build:
+    desc: Build detected language targets
+    cmds:
+      - cmd: |
+          set -eu
+          cd "{{.ROOT_DIR}}"
+
+          if [ -f python/db-kit/pyproject.toml ]; then
+            echo "==> python/db-kit: build"
+            (
+              cd python/db-kit
+              if command -v uv >/dev/null 2>&1; then
+                uv build
+              else
+                python -m build
+              fi
+            )
+          else
+            echo "==> python/db-kit: skipped"
+          fi
+
+          if [ -f rust/Cargo.toml ]; then
+            echo "==> rust: build"
+            (cd rust && cargo build --workspace)
+          else
+            echo "==> rust: skipped"
+          fi
+
+          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+            echo "==> go: build"
+            (cd go && go build ./...)
+          else
+            echo "==> go: skipped"
+          fi
+
+  test:
+    desc: Run detected language test suites
+    cmds:
+      - cmd: |
+          set -eu
+          cd "{{.ROOT_DIR}}"
+
+          if [ -f python/db-kit/pyproject.toml ]; then
+            echo "==> python/db-kit: test"
+            (
+              cd python/db-kit
+              if command -v uv >/dev/null 2>&1; then
+                uv run pytest
+              else
+                pytest
+              fi
+            )
+          else
+            echo "==> python/db-kit: skipped"
+          fi
+
+          if [ -f rust/Cargo.toml ]; then
+            echo "==> rust: test"
+            (cd rust && cargo test --workspace)
+          else
+            echo "==> rust: skipped"
+          fi
+
+          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+            echo "==> go: test"
+            (cd go && go test ./...)
+          else
+            echo "==> go: skipped"
+          fi
+
+  lint:
+    desc: Run detected language lint checks
+    cmds:
+      - cmd: |
+          set -eu
+          cd "{{.ROOT_DIR}}"
+
+          if [ -f python/db-kit/pyproject.toml ]; then
+            echo "==> python/db-kit: lint"
+            (
+              cd python/db-kit
+              if command -v uv >/dev/null 2>&1; then
+                uv run ruff check . && uv run mypy .
+              else
+                ruff check . && mypy .
+              fi
+            )
+          else
+            echo "==> python/db-kit: skipped"
+          fi
+
+          if [ -f rust/Cargo.toml ]; then
+            echo "==> rust: lint"
+            (cd rust && cargo clippy --workspace --all-targets -- -D warnings)
+          else
+            echo "==> rust: skipped"
+          fi
+
+          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+            echo "==> go: lint"
+            (cd go && go vet ./...)
+          else
+            echo "==> go: skipped"
+          fi
+
+  clean:
+    desc: Remove generated build and cache artifacts
+    cmds:
+      - cmd: |
+          set -eu
+          cd "{{.ROOT_DIR}}"
+
+          if [ -f python/db-kit/pyproject.toml ]; then
+            echo "==> python/db-kit: clean"
+            (
+              cd python/db-kit
+              python -c $'from pathlib import Path\nimport shutil\n\nroot = Path(".")\nfor name in ("build", "dist", ".pytest_cache", ".mypy_cache", ".ruff_cache"):\n    for path in root.rglob(name):\n        if path.is_dir():\n            shutil.rmtree(path, ignore_errors=True)\nfor path in root.rglob("__pycache__"):\n    if path.is_dir():\n        shutil.rmtree(path, ignore_errors=True)\nfor path in root.rglob("*.pyc"):\n    try:\n        path.unlink()\n    except FileNotFoundError:\n        pass'
+            )
+          else
+            echo "==> python/db-kit: skipped"
+          fi
+
+          if [ -f rust/Cargo.toml ]; then
+            echo "==> rust: clean"
+            (cd rust && cargo clean)
+          else
+            echo "==> rust: skipped"
+          fi
+
+          if [ -f go/go.work ] && find go -type f -name '*.go' -print -quit | grep -q .; then
+            echo "==> go: clean"
+            (cd go && go clean -cache -testcache)
+          else
+            echo "==> go: skipped"
+          fi
