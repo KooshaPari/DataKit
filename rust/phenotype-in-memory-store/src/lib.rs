@@ -13,6 +13,10 @@ use tokio::sync::RwLock;
 /// Result type for store operations
 pub type StoreResult<T> = Result<T, StoreError>;
 
+type SharedStore<K, V> = Arc<RwLock<HashMap<K, V>>>;
+type TtlEntry<V> = (V, chrono::DateTime<chrono::Utc>);
+type SharedTtlStore<K, V> = Arc<RwLock<HashMap<K, TtlEntry<V>>>>;
+
 /// Store error types
 #[derive(Debug, Error)]
 pub enum StoreError {
@@ -66,7 +70,7 @@ where
 
 /// In-memory store implementation using RwLock<HashMap>
 pub struct InMemoryStore<K, V> {
-    data: Arc<RwLock<HashMap<K, V>>>,
+    data: SharedStore<K, V>,
 }
 
 impl<K, V> InMemoryStore<K, V>
@@ -155,7 +159,7 @@ where
 
 /// In-memory store with TTL support
 pub struct InMemoryStoreWithTTL<K, V> {
-    data: Arc<RwLock<HashMap<K, (V, chrono::DateTime<chrono::Utc>)>>>,
+    data: SharedTtlStore<K, V>,
     ttl_seconds: i64,
 }
 

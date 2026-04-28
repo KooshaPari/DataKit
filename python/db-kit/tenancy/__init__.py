@@ -3,7 +3,7 @@ Tenancy module for database multi-tenancy support.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class TenancyAdapter(ABC):
