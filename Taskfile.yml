@@ -109,7 +109,7 @@ tasks:
           fi
 
   lint:
-    desc: Run detected language lint checks
+    desc: Run detected language lint and formatting checks
     silent: true
     cmds:
       - cmd: |
@@ -139,14 +139,26 @@ tasks:
           rust_manifests=$({{.RUST_MANIFESTS_CMD}})
           if [ -n "$rust_manifests" ]; then
             echo "==> rust: lint"
-            (cd rust && cargo clippy --workspace --all-targets -- -D warnings)
+            (
+              cd rust
+              cargo fmt --check
+              cargo clippy --workspace --all-targets -- -D warnings
+            )
           else
             echo "==> rust: skipped"
           fi
 
           if [ -n "$({{.GO_WORKSPACE_CMD}})" ] && [ -n "$({{.GO_SOURCES_CMD}})" ]; then
             echo "==> go: lint"
-            (cd go && go vet ./...)
+            (
+              cd go
+              unformatted=$(gofmt -l .)
+              if [ -n "$unformatted" ]; then
+                echo "$unformatted"
+                exit 1
+              fi
+              go vet ./...
+            )
           else
             echo "==> go: skipped"
           fi
