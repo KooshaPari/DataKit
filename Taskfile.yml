@@ -23,6 +23,7 @@ tasks:
 
   build:
     desc: Build detected language targets
+    silent: true
     cmds:
       - cmd: |
           set -eu
@@ -65,6 +66,7 @@ tasks:
 
   test:
     desc: Run detected language test suites
+    silent: true
     cmds:
       - cmd: |
           set -eu
@@ -104,6 +106,7 @@ tasks:
 
   lint:
     desc: Run detected language lint checks
+    silent: true
     cmds:
       - cmd: |
           set -eu
@@ -146,6 +149,7 @@ tasks:
 
   clean:
     desc: Remove generated build and cache artifacts
+    silent: true
     cmds:
       - cmd: |
           set -eu
