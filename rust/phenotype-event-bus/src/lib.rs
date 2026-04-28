@@ -82,10 +82,6 @@ impl InMemoryEventBus {
             _broadcast_rx: Arc::new(rx),
         }
     }
-
-    pub fn default() -> Self {
-        Self::new(1000)
-    }
 }
 
 impl Default for InMemoryEventBus {
