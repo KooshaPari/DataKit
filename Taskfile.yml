@@ -84,9 +84,9 @@ tasks:
             (
               cd "$primary_python_project"
               if command -v uv >/dev/null 2>&1; then
-                uv run pytest ../../tests
+                PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. uv run pytest ../../tests
               else
-                PYTHONPATH=. pytest ../../tests
+                PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. pytest ../../tests
               fi
             )
           else
@@ -183,7 +183,7 @@ tasks:
                 fi
               done
             ' sh {} +
-            find . -type f -name '*.pyc' -exec sh -c '
+            find . -type f \( -name '*.pyc' -o -name uv.lock \) -exec sh -c '
               for path do
                 if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
                   echo "preserve tracked $path"
