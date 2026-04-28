@@ -145,8 +145,24 @@ tasks:
           python_manifests=$(find . -path '*/pyproject.toml' -print | sort)
           if [ -n "$python_manifests" ]; then
             echo "==> python: clean"
-            find . \( -path '*/build' -o -path '*/dist' -o -path '*/.pytest_cache' -o -path '*/.mypy_cache' -o -path '*/.ruff_cache' -o -path '*/__pycache__' \) -type d -prune -exec rm -rf {} +
-            find . -type f -name '*.pyc' -delete
+            find . \( -path '*/build' -o -path '*/dist' -o -path '*/.pytest_cache' -o -path '*/.mypy_cache' -o -path '*/.ruff_cache' -o -path '*/__pycache__' -o -path '*/*.egg-info' \) -type d -prune -exec sh -c '
+              for path do
+                if git ls-files -- "$path" | grep -q .; then
+                  echo "preserve tracked $path"
+                else
+                  rm -rf "$path"
+                fi
+              done
+            ' sh {} +
+            find . -type f -name '*.pyc' -exec sh -c '
+              for path do
+                if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+                  echo "preserve tracked $path"
+                else
+                  rm -f "$path"
+                fi
+              done
+            ' sh {} +
           else
             echo "==> python: skipped"
           fi
