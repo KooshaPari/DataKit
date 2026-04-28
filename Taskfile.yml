@@ -2,7 +2,7 @@ version: "3"
 
 vars:
   ROOT_DIR:
-    sh: pwd
+    sh: git rev-parse --show-toplevel
 
 tasks:
   default:
@@ -19,21 +19,28 @@ tasks:
           set -eu
           cd "{{.ROOT_DIR}}"
 
-          if [ -f python/db-kit/pyproject.toml ]; then
-            echo "==> python/db-kit: build"
-            (
-              cd python/db-kit
-              if command -v uv >/dev/null 2>&1; then
-                uv build
-              else
-                python -m build
-              fi
-            )
+          python_manifests=$(find . -path '*/pyproject.toml' -print | sort)
+          if [ -n "$python_manifests" ]; then
+            echo "==> python: build"
+            printf '%s\n' "$python_manifests" | while IFS= read -r manifest; do
+              [ -n "$manifest" ] || continue
+              project_dir=$(dirname "$manifest")
+              echo "---- $project_dir"
+              (
+                cd "$project_dir"
+                if command -v uv >/dev/null 2>&1; then
+                  uv build
+                else
+                  python -m build
+                fi
+              )
+            done
           else
-            echo "==> python/db-kit: skipped"
+            echo "==> python: skipped"
           fi
 
-          if [ -f rust/Cargo.toml ]; then
+          rust_manifests=$(find rust -name Cargo.toml -print | sort)
+          if [ -n "$rust_manifests" ]; then
             echo "==> rust: build"
             (cd rust && cargo build --workspace)
           else
@@ -54,21 +61,25 @@ tasks:
           set -eu
           cd "{{.ROOT_DIR}}"
 
-          if [ -f python/db-kit/pyproject.toml ]; then
-            echo "==> python/db-kit: test"
+          python_manifests=$(find . -path '*/pyproject.toml' -print | sort)
+          if [ -n "$python_manifests" ] && [ -d tests ] && find tests -type f -name 'test_*.py' -print -quit | grep -q .; then
+            echo "==> python: test"
+            primary_python_project=$(printf '%s\n' "$python_manifests" | head -n 1 | xargs dirname)
+            echo "---- tests"
             (
-              cd python/db-kit
+              cd "$primary_python_project"
               if command -v uv >/dev/null 2>&1; then
-                uv run pytest
+                uv run pytest ../../tests
               else
-                pytest
+                PYTHONPATH=. pytest ../../tests
               fi
             )
           else
-            echo "==> python/db-kit: skipped"
+            echo "==> python: skipped"
           fi
 
-          if [ -f rust/Cargo.toml ]; then
+          rust_manifests=$(find rust -name Cargo.toml -print | sort)
+          if [ -n "$rust_manifests" ]; then
             echo "==> rust: test"
             (cd rust && cargo test --workspace)
           else
@@ -89,21 +100,28 @@ tasks:
           set -eu
           cd "{{.ROOT_DIR}}"
 
-          if [ -f python/db-kit/pyproject.toml ]; then
-            echo "==> python/db-kit: lint"
-            (
-              cd python/db-kit
-              if command -v uv >/dev/null 2>&1; then
-                uv run ruff check . && uv run mypy .
-              else
-                ruff check . && mypy .
-              fi
-            )
+          python_manifests=$(find . -path '*/pyproject.toml' -print | sort)
+          if [ -n "$python_manifests" ]; then
+            echo "==> python: lint"
+            printf '%s\n' "$python_manifests" | while IFS= read -r manifest; do
+              [ -n "$manifest" ] || continue
+              project_dir=$(dirname "$manifest")
+              echo "---- $project_dir"
+              (
+                cd "$project_dir"
+                if command -v uv >/dev/null 2>&1; then
+                  uv run ruff check . && uv run mypy .
+                else
+                  ruff check . && mypy .
+                fi
+              )
+            done
           else
-            echo "==> python/db-kit: skipped"
+            echo "==> python: skipped"
           fi
 
-          if [ -f rust/Cargo.toml ]; then
+          rust_manifests=$(find rust -name Cargo.toml -print | sort)
+          if [ -n "$rust_manifests" ]; then
             echo "==> rust: lint"
             (cd rust && cargo clippy --workspace --all-targets -- -D warnings)
           else
@@ -124,17 +142,17 @@ tasks:
           set -eu
           cd "{{.ROOT_DIR}}"
 
-          if [ -f python/db-kit/pyproject.toml ]; then
-            echo "==> python/db-kit: clean"
-            (
-              cd python/db-kit
-              python -c $'from pathlib import Path\nimport shutil\n\nroot = Path(".")\nfor name in ("build", "dist", ".pytest_cache", ".mypy_cache", ".ruff_cache"):\n    for path in root.rglob(name):\n        if path.is_dir():\n            shutil.rmtree(path, ignore_errors=True)\nfor path in root.rglob("__pycache__"):\n    if path.is_dir():\n        shutil.rmtree(path, ignore_errors=True)\nfor path in root.rglob("*.pyc"):\n    try:\n        path.unlink()\n    except FileNotFoundError:\n        pass'
-            )
+          python_manifests=$(find . -path '*/pyproject.toml' -print | sort)
+          if [ -n "$python_manifests" ]; then
+            echo "==> python: clean"
+            find . \( -path '*/build' -o -path '*/dist' -o -path '*/.pytest_cache' -o -path '*/.mypy_cache' -o -path '*/.ruff_cache' -o -path '*/__pycache__' \) -type d -prune -exec rm -rf {} +
+            find . -type f -name '*.pyc' -delete
           else
-            echo "==> python/db-kit: skipped"
+            echo "==> python: skipped"
           fi
 
-          if [ -f rust/Cargo.toml ]; then
+          rust_manifests=$(find rust -name Cargo.toml -print | sort)
+          if [ -n "$rust_manifests" ]; then
             echo "==> rust: clean"
             (cd rust && cargo clean)
           else
