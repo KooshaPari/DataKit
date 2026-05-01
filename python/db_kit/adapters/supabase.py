@@ -53,8 +53,8 @@ class SupabaseAdapter(DatabaseAdapter):
                         "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY",
                     )
                 self._client = create_client(url, key)
-            except ImportError:
-                raise ImportError("supabase-py not installed. Install with: pip install supabase")
+            except ImportError as err:
+                raise ImportError("supabase-py not installed. Install with: pip install supabase") from err
 
         # Apply access token if available
         if self._access_token and hasattr(self._client, "auth"):
@@ -180,7 +180,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return data
 
         except Exception as e:
-            raise RuntimeError(f"Failed to query table {table}: {e}")
+            raise RuntimeError(f"Failed to query table {table}: {e}") from e
 
     async def get_single(
         self, table: str, filters: dict[str, Any], *, select: str | None = None,
@@ -220,7 +220,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return inserted[0] if isinstance(data, dict) else inserted
 
         except Exception as e:
-            raise RuntimeError(f"Failed to insert into table {table}: {e}")
+            raise RuntimeError(f"Failed to insert into table {table}: {e}") from e
 
     async def update(
         self,
@@ -242,7 +242,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return getattr(result, "data", []) or []
 
         except Exception as e:
-            raise RuntimeError(f"Failed to update table {table}: {e}")
+            raise RuntimeError(f"Failed to update table {table}: {e}") from e
 
     async def delete(
         self, table: str, filters: dict[str, Any], *, returning: str | None = None,
@@ -259,7 +259,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return getattr(result, "data", []) or []
 
         except Exception as e:
-            raise RuntimeError(f"Failed to delete from table {table}: {e}")
+            raise RuntimeError(f"Failed to delete from table {table}: {e}") from e
 
     async def upsert(
         self,
@@ -282,7 +282,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return upserted[0] if isinstance(data, dict) else upserted
 
         except Exception as e:
-            raise RuntimeError(f"Failed to upsert into table {table}: {e}")
+            raise RuntimeError(f"Failed to upsert into table {table}: {e}") from e
 
     async def execute(self, sql: str, params: list | dict | None = None) -> Any:
         """
@@ -294,7 +294,7 @@ class SupabaseAdapter(DatabaseAdapter):
             return getattr(result, "data", None)
 
         except Exception as e:
-            raise RuntimeError(f"Failed to execute SQL: {e}")
+            raise RuntimeError(f"Failed to execute SQL: {e}") from e
 
     async def count(self, table: str, filters: dict[str, Any] | None = None) -> int:
         """
@@ -309,4 +309,4 @@ class SupabaseAdapter(DatabaseAdapter):
             return getattr(result, "count", 0)
 
         except Exception as e:
-            raise RuntimeError(f"Failed to count rows in table {table}: {e}")
+            raise RuntimeError(f"Failed to count rows in table {table}: {e}") from e

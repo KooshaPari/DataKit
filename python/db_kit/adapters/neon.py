@@ -63,8 +63,8 @@ class NeonAdapter(PostgreSQLAdapter):
                         "Content-Type": "application/json",
                     },
                 )
-            except ImportError:
-                raise ImportError("httpx not installed. Install with: pip install httpx")
+            except ImportError as err:
+                raise ImportError("httpx not installed. Install with: pip install httpx") from err
 
         return self._api_client
 

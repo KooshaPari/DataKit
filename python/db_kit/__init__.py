@@ -54,7 +54,7 @@ from .realtime import RealtimeAdapter, SupabaseRealtimeAdapter
 from .storage import StorageAdapter, SupabaseStorageAdapter
 
 # Supabase client utilities
-from .supabase_client import MissingSupabaseConfig, get_supabase
+from .supabase_client import MissingSupabaseConfigError, get_supabase
 
 # Multi-tenancy
 from .tenancy import TenancyAdapter
@@ -78,7 +78,7 @@ __all__ = [
     "Migration",
     "MigrationEngine",
     "MigrationStatus",
-    "MissingSupabaseConfig",
+    "MissingSupabaseConfigError",
     "NeonAdapter",
     "PostgreSQLAdapter",
     # Realtime
