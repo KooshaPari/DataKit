@@ -7,11 +7,13 @@ from __future__ import annotations
 import hashlib
 import os
 import time
+from typing import TYPE_CHECKING
 
-from supabase import Client, create_client
+if TYPE_CHECKING:
+    from supabase import Client
 
 
-class MissingSupabaseConfig(RuntimeError):
+class MissingSupabaseConfigError(RuntimeError):
     """
     Raised when Supabase configuration is missing or invalid.
     """
@@ -27,10 +29,12 @@ def get_supabase(access_token: str | None = None) -> Client:
     """
     Return a cached Supabase client using the supplied access token.
     """
+    from supabase import create_client
+
     url = os.getenv("SUPABASE_URL", "").strip()
     key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
     if not url or not key:
-        raise MissingSupabaseConfig("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set")
+        raise MissingSupabaseConfigError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set")
 
     cache_key = hashlib.md5(access_token.encode()).hexdigest()[:16] if access_token else "service"
     now = time.time()

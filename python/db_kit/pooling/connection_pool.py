@@ -50,6 +50,7 @@ class ConnectionPoolConfig:
     # Timeout settings (in seconds)
     connect_timeout: float = 30.0
     read_timeout: float = 60.0
+    write_timeout: float = 60.0
     pool_timeout: float = 5.0
 
     # Keep-alive settings
@@ -320,6 +321,7 @@ class SyncConnectionPool:
                 timeout = httpx.Timeout(
                     connect=self.config.connect_timeout,
                     read=self.config.read_timeout,
+                    write=self.config.write_timeout,
                     pool=self.config.pool_timeout,
                 )
 
