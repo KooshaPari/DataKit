@@ -11,3 +11,12 @@
 **/dist/
 **/*.egg-info/
 **/*.pyc
+
+# Embedded git repositories (not submodules)
+python/pheno-caching/
+python/pheno-database/
+python/pheno-events/
+python/pheno-storage/
+rust/eventra/
+typescript/datamold/
+typescript/datamold/
