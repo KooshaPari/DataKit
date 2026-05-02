@@ -5,7 +5,7 @@ description = "Universal database abstraction with RLS, multi-tenancy, and conne
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Phenotype", email = "dev@phenotype.dev"}
+    {name = "Phenotype", email = "dev@phenotype.space"}
 ]
 requires-python = ">=3.10"
 keywords = ["database", "supabase", "postgresql", "neon", "async", "rls", "multi-tenancy"]
