@@ -38,7 +38,7 @@ class SupabaseStorageAdapter(StorageAdapter):
                     )
                 self._client = create_client(url, key)
             except ImportError:
-                raise ImportError("supabase-py not installed. Install with: pip install supabase")
+                raise ImportError("supabase-py not installed. Install with: pip install supabase") from None
         return self._client
 
     async def upload(
@@ -72,7 +72,7 @@ class SupabaseStorageAdapter(StorageAdapter):
             return self.get_public_url(bucket, path)
 
         except Exception as e:
-            raise RuntimeError(f"Failed to upload file to {bucket}/{path}: {e}")
+            raise RuntimeError(f"Failed to upload file to {bucket}/{path}: {e}") from e
 
     async def download(self, bucket: str, path: str) -> bytes:
         """
@@ -90,7 +90,7 @@ class SupabaseStorageAdapter(StorageAdapter):
             return result
 
         except Exception as e:
-            raise RuntimeError(f"Failed to download file from {bucket}/{path}: {e}")
+            raise RuntimeError(f"Failed to download file from {bucket}/{path}: {e}") from e
 
     async def delete(self, bucket: str, path: str) -> bool:
         """

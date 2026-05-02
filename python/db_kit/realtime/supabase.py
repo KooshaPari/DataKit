@@ -41,7 +41,7 @@ class SupabaseRealtimeAdapter(RealtimeAdapter):
                     )
                 self._client = create_client(url, key)
             except ImportError:
-                raise ImportError("supabase-py not installed. Install with: pip install supabase")
+                raise ImportError("supabase-py not installed. Install with: pip install supabase") from None
         return self._client
 
     async def subscribe(
@@ -90,7 +90,7 @@ class SupabaseRealtimeAdapter(RealtimeAdapter):
             return subscription_id
 
         except Exception as e:
-            raise RuntimeError(f"Failed to subscribe to {table}: {e}")
+            raise RuntimeError(f"Failed to subscribe to {table}: {e}") from e
 
     async def unsubscribe(self, subscription_id: str) -> bool:
         """

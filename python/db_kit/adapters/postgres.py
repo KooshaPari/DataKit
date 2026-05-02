@@ -75,7 +75,7 @@ class PostgreSQLAdapter(DatabaseAdapter):
                     self._dsn, min_size=self._min_pool_size, max_size=self._max_pool_size,
                 )
             except ImportError:
-                raise ImportError("asyncpg not installed. Install with: pip install asyncpg")
+                raise ImportError("asyncpg not installed. Install with: pip install asyncpg") from None
 
         return self._pool
 
