@@ -1,84 +1,70 @@
-# DataKit
+# DataKit — Moved
 
-[![Build](https://img.shields.io/github/actions/workflow/status/KooshaPari/DataKit/ci.yml?branch=main&label=build)](https://github.com/KooshaPari/DataKit/actions)
-[![Release](https://img.shields.io/github/v/release/KooshaPari/DataKit?include_prereleases&sort=semver)](https://github.com/KooshaPari/DataKit/releases)
-[![License](https://img.shields.io/github/license/KooshaPari/DataKit)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+> **DataKit has moved to [`KooshaPari/phenotype-python-sdk`](https://github.com/KooshaPari/phenotype-python-sdk/tree/main/packages/data-kit).**
+>
+> This repository is **archived and read-only** as of 2026-06-12. It is retained
+> as a husk per `RATIONALIZATION_PLAN.md` (org invariant: "Husks remain as
+> archived redirects — never deleted."). All new work, issues, and PRs should
+> be opened against the SDK monorepo.
 
-Storage and events SDK for the Phenotype ecosystem. Polyglot building blocks for databases, caches, object storage, and event streams — shipped as Go, Rust, and Python bindings from a single source of truth.
+## New home
 
-**Part of the [Phenotype org](https://github.com/KooshaPari) ecosystem.** Shares CI reusables and conventions with [phenoShared](https://github.com/KooshaPari/phenoShared). Follows org conventions: conventional commits, `<type>/<topic>` branching, Apache-2.0 + MIT dual license.
+| Was (this repo, archived) | Is now (active) |
+|---|---|
+| `KooshaPari/DataKit` (this repo) | [`KooshaPari/phenotype-python-sdk/packages/data-kit/`](https://github.com/KooshaPari/phenotype-python-sdk/tree/main/packages/data-kit) |
+| Python: `pheno-database`, `pheno-caching`, `pheno-storage`, `pheno-events`, `db-kit` | Python: `pheno_database`, `pheno_caching`, `pheno_storage`, `pheno_events`, `db_kit` (same packages, underscore-named under uv workspace) |
+| Go bindings: `go/` | Go bindings: `packages/data-kit/go/` |
+| Rust bindings: `rust/` (workspace crates) | Rust bindings: `packages/data-kit/rust/` |
+| Standalone PyPI: `pheno-db-kit` | Published from `packages/data-kit/python/db_kit` with extras `[supabase]`, `[neon]`, `[turso]`, `[all]`, `[dev]` |
 
-## What it does
+The SDK monorepo also publishes the high-level `pheno-db-kit` package as a
+standalone PyPI artifact with the same feature surface that was previously
+distributed from this repo's `db-kit/` subdirectory.
 
-Every Phenotype service eventually needs the same things: a key/value cache, a relational or document store, an object bucket, and an event bus. DataKit provides idiomatic Go, Rust, and Python wrappers around those primitives so services never have to pick (or misconfigure) a client library ad-hoc.
+## What this archive contains
 
-The Python bindings are the most mature surface today; Go and Rust bindings mirror the same contracts.
+This repo is preserved for **historical reference and provenance** only. The
+following records live here:
 
-## Status
+- **51 PRs** (48 merged, 1 open, 2 closed-unmerged) documenting the original
+  standalone build-out, hygiene bootstrap, and event-sourcing migration.
+- **The branch history** showing the full evolution from
+  `feat/journey-impl` → cargo-deny → event-bus hardening → eventual merge into
+  the SDK monorepo (see PR #2 on `phenotype-python-sdk`:
+  *"feat: absorb AuthKit/DataKit/McpKit/ObservabilityKit/ResilienceKit/TestingKit/PhenoKits into python SDK monorepo (rationalization)"*).
+- **ADR records** at `ADR.md` and `docs/adr/` — these were copied verbatim
+  into `phenotype-python-sdk/packages/data-kit/ADR.md` and
+  `phenotype-python-sdk/packages/data-kit/docs/adr/`.
 
-**Active.** Core Python packages (`pheno-database`, `pheno-caching`, `pheno-storage`, `pheno-events`, `db-kit`) are in use by downstream services. See [CHANGELOG.md](./CHANGELOG.md).
+## Migration history
 
-## Requirements
+| Date | Event |
+|---|---|
+| 2026-04-05 | Repo created (commit `0119338` + `d86c48e` + `22ec9ed`) |
+| 2026-04-24 | License, hygiene, CI, security, scorecard baseline merged |
+| 2026-04-26 | `chore/migrate-vendored-to-phenoshared` merged (#19) — `phenotype-cache-adapter` and `phenotype-event-sourcing` Rust crates moved to canonical `phenoShared` |
+| 2026-04-28 | `feat/journey-impl` merged (#40) — journey-traceability + iconography |
+| 2026-05-01 | `chore: FUNDING.yml + SECURITY.md + python migration` (#41) |
+| 2026-05-04 | `chore(ci): add cargo-deny workflow` (#44) — final standalone commit on `main` |
+| 2026-05-31 | **`phenotype-python-sdk` PR #2 merged**: *"feat: absorb AuthKit/DataKit/McpKit/ObservabilityKit/ResilienceKit/TestingKit/PhenoKits into python SDK monorepo (rationalization)"* — the canonical merger event |
+| 2026-06-12 | This redirect README installed; PR #51 closed as superseded |
 
-- **Python** (primary): 3.11+ with `uv` or `pip`
-- **Go**: 1.22+
-- **Rust**: stable, edition 2021
-- Backing services at runtime depend on which adapter you use: Postgres, Redis, MinIO/S3, NATS, etc.
+## Open work in this archive
 
-## Quick start
-
-### Python
-
-```bash
-cd python
-uv sync                    # or: pip install -e '.[dev]'
-uv run pytest              # or: pytest
-uv run ruff check .
-uv run mypy .
-```
-
-### Go
-
-```bash
-cd go
-go build ./...
-go test ./...
-```
-
-### Rust
-
-```bash
-cd rust
-cargo build --workspace
-cargo test --workspace
-cargo clippy --workspace --all-targets -- -D warnings
-```
-
-## Structure
-
-```
-python/
-  pheno-database/   # SQL/NoSQL database client primitives
-  pheno-caching/    # Cache adapters (Redis, in-memory, tiered)
-  pheno-storage/    # Object storage (MinIO / S3-compatible)
-  pheno-events/     # Event bus adapters (NATS, etc.)
-  db-kit/           # Higher-level database convenience layer
-go/                 # Go bindings mirroring the Python contracts
-rust/               # Rust bindings mirroring the Python contracts
-```
-
-## Design principles
-
-- **Contracts first.** Each binding implements the same logical contract; semantic drift is a bug.
-- **Wrap, do not hand-roll.** Uses well-maintained upstream clients (psycopg, redis-py, minio, nats.py, etc.); adds Phenotype policy on top.
-- **Fail loudly.** Missing required config (connection URL, credentials) is a hard error; no silent fallback to in-memory stubs in production.
-- **Observability baked in.** Adapters emit structured events suitable for Phenotype's observability stack.
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md). Ownership lives in [CODEOWNERS](./CODEOWNERS). Report security issues per [SECURITY.md](./SECURITY.md).
+- **PR #51** (`chore(gitignore): adopt shared python template from phenotype-tooling`)
+  was part of a fleet-wide rollout (V14-T3-1e wave 2). The equivalent change
+  must be applied in the SDK monorepo at
+  `phenotype-python-sdk/.gitignore` (it is currently still using the pre-merge
+  gitignore). Re-open as a PR against `phenotype-python-sdk` to complete the
+  rollout for the SDK.
 
 ## License
 
-Dual-licensed under Apache-2.0 OR MIT. See [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT).
+Dual-licensed under Apache-2.0 OR MIT. See `LICENSE-APACHE` and `LICENSE-MIT`
+in this archive, or the equivalent files in
+[`phenotype-python-sdk`](https://github.com/KooshaPari/phenotype-python-sdk).
+
+---
+
+*Redirect installed 2026-06-12 per `RATIONALIZATION_PLAN.md` §"ARCHIVE / HUSK"
+(DataKit → phenotype-python-sdk).*
