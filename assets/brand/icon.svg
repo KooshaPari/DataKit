@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="DataKit — data toolkit &amp; ETL">
+  <defs>
+    <linearGradient id="dk-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e1116"/>
+      <stop offset="1" stop-color="#090a0c"/>
+    </linearGradient>
+    <linearGradient id="dk-hex" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2228"/>
+      <stop offset="1" stop-color="#0a0d11"/>
+    </linearGradient>
+    <linearGradient id="dk-cyl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="dk-diamond" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#93c5fd"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="dk-arrow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <radialGradient id="dk-glow" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="dk-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="512" height="512" rx="96" ry="96" fill="url(#dk-bg)"/>
+  <circle cx="256" cy="256" r="220" fill="url(#dk-glow)"/>
+
+  <!-- hexagonal toolkit frame -->
+  <g filter="url(#dk-shadow)">
+    <polygon points="256,72 408,160 408,352 256,440 104,352 104,160"
+             fill="url(#dk-hex)" stroke="#3b82f6" stroke-opacity="0.45" stroke-width="2.5"/>
+  </g>
+
+  <!-- inner panel -->
+  <polygon points="256,108 376,178 376,334 256,404 136,334 136,178"
+           fill="#0a0d11" fill-opacity="0.6" stroke="#3b82f6" stroke-opacity="0.18" stroke-width="1"/>
+
+  <!-- cylinder 1 (left) -->
+  <g>
+    <ellipse cx="178" cy="180" rx="42" ry="12" fill="url(#dk-cyl)"/>
+    <rect x="136" y="180" width="84" height="50" fill="url(#dk-cyl)"/>
+    <ellipse cx="178" cy="230" rx="42" ry="12" fill="#1e3a8a"/>
+    <ellipse cx="178" cy="180" rx="42" ry="12" fill="none" stroke="#93c5fd" stroke-opacity="0.7" stroke-width="1.5"/>
+    <!-- data stripes -->
+    <line x1="148" y1="200" x2="208" y2="200" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+    <line x1="148" y1="212" x2="200" y2="212" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+    <line x1="148" y1="224" x2="196" y2="224" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+  </g>
+
+  <!-- arrow left → center -->
+  <g>
+    <path d="M 220 220 L 252 220" stroke="url(#dk-arrow)" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="252,210 268,220 252,230" fill="#3b82f6"/>
+  </g>
+
+  <!-- center diamond (transform) -->
+  <g filter="url(#dk-shadow)">
+    <polygon points="276,200 316,256 276,312 236,256" fill="url(#dk-diamond)" stroke="#bfdbfe" stroke-width="2"/>
+    <polygon points="276,224 304,256 276,288 248,256" fill="#0a0d11" fill-opacity="0.7"/>
+    <!-- f symbol -->
+    <path d="M 270 248 L 282 248 M 276 248 L 276 268" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- arrow center → right -->
+  <g>
+    <path d="M 316 256 L 348 256" stroke="url(#dk-arrow)" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="348,246 364,256 348,266" fill="#3b82f6"/>
+  </g>
+
+  <!-- cylinder 2 (right) -->
+  <g>
+    <ellipse cx="394" cy="180" rx="42" ry="12" fill="url(#dk-cyl)"/>
+    <rect x="352" y="180" width="84" height="50" fill="url(#dk-cyl)"/>
+    <ellipse cx="394" cy="230" rx="42" ry="12" fill="#1e3a8a"/>
+    <ellipse cx="394" cy="180" rx="42" ry="12" fill="none" stroke="#93c5fd" stroke-opacity="0.7" stroke-width="1.5"/>
+    <line x1="364" y1="200" x2="424" y2="200" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+    <line x1="364" y1="212" x2="416" y2="212" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+    <line x1="364" y1="224" x2="420" y2="224" stroke="#bfdbfe" stroke-opacity="0.5" stroke-width="1"/>
+  </g>
+
+  <!-- bottom row: output destination -->
+  <g>
+    <path d="M 394 230 Q 394 350 256 380" fill="none" stroke="url(#dk-arrow)" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+    <polygon points="256,370 246,384 256,388 266,384" fill="#3b82f6" opacity="0.7"/>
+  </g>
+
+  <!-- top row: source input -->
+  <g>
+    <path d="M 178 230 Q 178 130 256 130" fill="none" stroke="url(#dk-arrow)" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+    <polygon points="246,124 266,124 256,138" fill="#3b82f6" opacity="0.7"/>
+  </g>
+
+  <!-- node marker -->
+  <circle cx="256" cy="256" r="6" fill="#bfdbfe"/>
+</svg>
