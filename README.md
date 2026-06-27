@@ -1,10 +1,15 @@
-> **Work-state:** planning — `[#---------] 10%`
+> **Work-state:** planning | `[#---------]` | 10%
 >
-> Data transformation and ETL toolkit for Phenotype. Repository placeholder; architecture and design phase. Pending: core abstractions, streaming engine design, plugin API spec.
+> Data transformation and ETL toolkit for Phenotype.
+> Repository placeholder for the framework's architecture and design phase, covering core abstractions, streaming engine direction, and plugin API shape.
 
 # DataKit
 
 **Data transformation and ETL framework** for the Phenotype ecosystem.
+
+## Usage / Quickstart
+
+This repository is currently a documentation-first placeholder, so there is no runnable package yet. Start by reading the status notes below, then use this repo as the source of truth for the planned data pipeline, connector, and plugin surface area.
 
 ## Overview
 
@@ -27,7 +32,7 @@ DataKit is a unified data transformation and ETL (Extract-Transform-Load) framew
 
 ## Getting Started
 
-Repository structure and initial abstractions coming soon.
+Repository structure and initial abstractions are coming soon.
 
 ## License
 
