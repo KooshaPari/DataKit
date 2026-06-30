@@ -1,3 +1,8 @@
+> [!WARNING]
+> **DEPRECATED — ARCHIVE RECOMMENDED**
+> This repository has been superseded by [`phenotype-python-sdk/packages/data-kit`](https://github.com/KooshaPari/phenotype-python-sdk).
+> The content here is pre-alpha planning-phase code (10% complete). See [TOMBSTONE.md](./TOMBSTONE.md) for full context.
+
 > **Work-state:** planning | `[#---------]` | 10%
 >
 > Data transformation and ETL toolkit for Phenotype.
