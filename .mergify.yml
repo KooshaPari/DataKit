@@ -97,6 +97,22 @@ pull_request_rules:
         add:
           - typescript
 
+  - name: Label CI changes
+    conditions:
+      - files~=\.github/
+    actions:
+      label:
+        add:
+          - ci
+
+  - name: Label documentation changes
+    conditions:
+      - files~=\.md$|\.txt$
+    actions:
+      label:
+        add:
+          - documentation
+
   # Close stale PRs after 30 days
   - name: Close stale PRs
     conditions:

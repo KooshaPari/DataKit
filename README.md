@@ -39,6 +39,18 @@ DataKit is a unified data transformation and ETL (Extract-Transform-Load) framew
 
 Repository structure and initial abstractions are coming soon.
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+
+## Security
+
+For vulnerability reporting, see [SECURITY.md](SECURITY.md).
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](CODE_OF_CONDUCT.md).
+
 ## License
 
 Phenotype organization. See main org LICENSE.
