@@ -12,6 +12,8 @@
 
 **Data transformation and ETL framework** for the Phenotype ecosystem.
 
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/DataKit/total)](https://github.com/KooshaPari/DataKit/releases)
+
 ## Usage / Quickstart
 
 This repository is currently a documentation-first placeholder, so there is no runnable package yet. Start by reading the status notes below, then use this repo as the source of truth for the planned data pipeline, connector, and plugin surface area.
